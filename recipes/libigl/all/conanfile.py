@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from conan import ConanFile
 from conan.errors import ConanInvalidConfiguration, ConanException
@@ -7,7 +8,7 @@ from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
 from conan.tools.env import VirtualBuildEnv
 from conan.tools.files import copy, get, rm, rmdir, replace_in_file, export_conandata_patches, apply_conandata_patches
 from conan.tools.microsoft import is_msvc_static_runtime
-from conan.tools.scm import Version
+from conan.tools.scm import Git, Version
 
 required_conan_version = ">=1.53.0"
 
@@ -104,7 +105,16 @@ class LibiglConan(ConanFile):
             )
 
     def source(self):
-        get(self, **self.conan_data["sources"][self.version], strip_root=True)
+
+        url = self.conan_data["sources"][self.version]["url"]
+        if url.endswith(".git"):
+            git = Git(self)
+            git.clone(url=self.conan_data["sources"][self.version]["url"], target="libigl")
+            shutil.copytree("libigl/", "./", dirs_exist_ok=True)
+            shutil.rmtree("libigl")
+            git.checkout(self.conan_data["sources"][self.version]["ref"])
+        else:
+            get(self, **self.conan_data["sources"][self.version], strip_root=True)
 
     def generate(self):
         env = VirtualBuildEnv(self)

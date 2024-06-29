@@ -1,4 +1,7 @@
 sources:
+  "2.5.1-beholder":
+    url: "git@github.com:Beholder-Vision/libigl.git"
+    ref: "ab4bf5aa4274596b29ae587ca1aac845c1e369c8"
   "2.5.0":
     url: "https://github.com/libigl/libigl/archive/refs/tags/v2.5.0.zip"
     sha256: "84af6a5f9266a4c1ce530f9ef8028c8a3569318563012d72a753622f61ea2f68"

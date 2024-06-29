@@ -1,4 +1,6 @@
 versions:
+  "5.0.0-dev-beholder":
+    folder: "5.x"
   "4.10.0":
     folder: "4.x"
   "4.9.0":

@@ -3,6 +3,7 @@ from conan.tools.files import get, rmdir, save, load
 from conan.tools.build import check_min_cppstd
 from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
 from conan.tools.microsoft import is_msvc_static_runtime
+from conan.tools.scm import Git
 import os
 
 required_conan_version = ">=1.53.0"
@@ -19,10 +20,12 @@ class TinyEXIFConan(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
+        "with_tinyxml": [True, False]
     }
     default_options = {
         "shared": False,
         "fPIC": True,
+        "with_tinyxml": True
     }
 
     @property
@@ -41,20 +44,32 @@ class TinyEXIFConan(ConanFile):
         cmake_layout(self, src_folder="src")
 
     def requirements(self):
-        self.requires("tinyxml2/9.0.0")
+        if self.options.with_tinyxml:
+            self.requires("tinyxml2/9.0.0")
 
     def validate(self):
         if self.settings.compiler.cppstd:
             check_min_cppstd(self, self._min_cppstd)
 
     def source(self):
-        get(self, **self.conan_data["sources"][self.version], strip_root=True)
+
+        url = self.conan_data["sources"][self.version]["url"]
+        if url.endswith(".git"):
+            git = Git(self)
+            git.clone(url=self.conan_data["sources"][self.version]["url"], target=".")
+            git.checkout(self.conan_data["sources"][self.version]["ref"])
+        else:
+            get(self, **self.conan_data["sources"][self.version], strip_root=True)
 
     def generate(self):
         tc = CMakeToolchain(self)
         tc.variables["BUILD_STATIC_LIBS"] = not self.options.shared
         tc.variables["LINK_CRT_STATIC_LIBS"] = is_msvc_static_runtime(self)
         tc.variables["BUILD_DEMO"] = False
+
+        if not self.options.with_tinyxml:
+            tc.variables["ENABLE_XMP_SUPPORT"] = False
+
         tc.cache_variables["CMAKE_POLICY_DEFAULT_CMP0077"] = "NEW"
         tc.generate()
 

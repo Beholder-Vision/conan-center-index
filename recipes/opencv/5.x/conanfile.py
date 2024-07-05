@@ -1651,6 +1651,10 @@ class OpenCVConan(ConanFile):
 
     def package_info(self):
         version = self.version.split(".")
+
+        # Only use the initial part from the patch version if there are multiple
+        version[-1] = version[-1].split("-")[0]
+
         version = "".join(version) if self.settings.os == "Windows" else ""
         debug = "d" if self.settings.build_type == "Debug" and self.settings.os == "Windows" else ""
 

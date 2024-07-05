@@ -1,5 +1,6 @@
 import os
 import shutil
+import stat
 
 from conan import ConanFile
 from conan.errors import ConanInvalidConfiguration, ConanException
@@ -111,7 +112,13 @@ class LibiglConan(ConanFile):
             git = Git(self)
             git.clone(url=self.conan_data["sources"][self.version]["url"], target="libigl")
             shutil.copytree("libigl/", "./", dirs_exist_ok=True)
-            shutil.rmtree("libigl")
+
+            def del_read_only_file(action, name, exc):
+                os.chmod(name, stat.S_IWRITE)
+                os.remove(name)
+
+            shutil.rmtree("libigl", onerror=del_read_only_file)
+
             git.checkout(self.conan_data["sources"][self.version]["ref"])
         else:
             get(self, **self.conan_data["sources"][self.version], strip_root=True)

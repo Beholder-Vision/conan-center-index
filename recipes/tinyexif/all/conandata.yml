@@ -1,6 +1,6 @@
 sources:
   "1.0.3-beholder":
-    url: "git@github.com:Beholder-Vision/TinyEXIF.git"
+    url: "https://github.com/Beholder-Vision/TinyEXIF.git"
     ref: "def752505527d50b0150bc3405de3a00ce3e8446"
   "cci.20210411":
     url: "https://github.com/cdcseacave/TinyEXIF/archive/6e56015f56ee0f387f1b8c76e50eb35ac60372da.tar.gz"

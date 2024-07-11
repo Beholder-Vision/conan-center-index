@@ -1,6 +1,6 @@
 sources:
   "5.0.0-dev-beholder":
-    - url: "git@github.com:Beholder-Vision/opencv.git"
+    - url: "https://github.com/Beholder-Vision/opencv.git"
       ref: "068de80f2cc7cf7ff96c9325736c512c70848ca1"
     - url: "https://github.com/opencv/opencv_contrib.git"
       ref: "96257c249240011a9609ce59ac9875dffb91369b"

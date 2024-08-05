@@ -30,6 +30,7 @@ class CeressolverConan(ConanFile):
         "shared": [True, False],
         "fPIC": [True, False],
         "use_glog":  [True, False], #TODO Set to true once gflags with nothreads=False binaries are available. Using MINILOG has a big performance drawback.
+        "miniglog_max_log_level": [-3, -2, -1, 0, 1, 2, 3],
         "use_gflags": [True, False, "deprecated"],
         "use_custom_blas": [True, False],
         "use_eigen_sparse": [True, False],
@@ -42,6 +43,7 @@ class CeressolverConan(ConanFile):
         "shared": False,
         "fPIC": True,
         "use_glog": False,
+        "miniglog_max_log_level": 2,
         "use_gflags": "deprecated",
         "use_custom_blas": True,
         "use_eigen_sparse": True,
@@ -128,6 +130,7 @@ class CeressolverConan(ConanFile):
     def generate(self):
         tc = CMakeToolchain(self)
         tc.variables["MINIGLOG"] = not self.options.use_glog
+        tc.variables["MINIGLOG_MAX_LOG_LEVEL"] = str(self.options.miniglog_max_log_level)
         tc.variables["GFLAGS"] = False # useless for the lib itself, gflags is not a direct dependency
         tc.variables["SUITESPARSE"] = False
         tc.variables["LAPACK"] = False

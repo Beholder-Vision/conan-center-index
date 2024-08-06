@@ -56,7 +56,11 @@ class EigenConan(ConanFile):
         cmake = CMake(self)
         cmake.install()
 
-        copy(self, "COPYING.*", self.source_folder, os.path.join(self.package_folder, "licenses"))
+        copy_excludes = None
+        if self.options.MPL2_only:
+            copy_excludes = [ "COPYING.LGPL", "COPYING.GPL" ]
+
+        copy(self, "COPYING.*", self.source_folder, os.path.join(self.package_folder, "licenses"), excludes=copy_excludes)
         rmdir(self, os.path.join(self.package_folder, "share"))
 
     def package_info(self):

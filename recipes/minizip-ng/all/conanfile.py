@@ -32,6 +32,8 @@ class MinizipNgConan(ConanFile):
         "with_iconv": [True, False],
         "with_libbsd": [True, False],
         "with_libcomp": [True, False],
+        "with_pkcrypt": [True, False],
+        "with_wzaes": [True, False],
     }
     default_options = {
         "shared": False,
@@ -45,6 +47,8 @@ class MinizipNgConan(ConanFile):
         "with_iconv": True,
         "with_libbsd": True,
         "with_libcomp": True,
+        "with_pkcrypt": True,
+        "with_wzaes": True,
     }
 
     @property
@@ -115,6 +119,8 @@ class MinizipNgConan(ConanFile):
         tc.cache_variables["MZ_ZSTD"] = self.options.with_zstd
         tc.cache_variables["MZ_OPENSSL"] = self.options.with_openssl
         tc.cache_variables["MZ_LIBCOMP"] = self.options.get_safe("with_libcomp", False)
+        tc.cache_variables["MZ_PKCRYPT"] = self.options.with_pkcrypt
+        tc.cache_variables["MZ_WZAES"] = self.options.with_wzaes
         if self.settings.os != "Windows":
             tc.cache_variables["MZ_ICONV"] = self.options.with_iconv
             tc.cache_variables["MZ_LIBBSD"] = self.options.with_libbsd

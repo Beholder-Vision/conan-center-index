@@ -1,7 +1,7 @@
 sources:
   "5.0.0-dev-beholder":
     - url: "https://github.com/Beholder-Vision/opencv.git"
-      ref: "068de80f2cc7cf7ff96c9325736c512c70848ca1"
+      ref: "026349d6949a19246c5ae169100cf4a5be8b19b7"
     - url: "https://github.com/opencv/opencv_contrib.git"
       ref: "96257c249240011a9609ce59ac9875dffb91369b"
 patches:

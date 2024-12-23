@@ -1575,6 +1575,7 @@ class OpenCVConan(ConanFile):
         cmake.install()
         rmdir(self, os.path.join(self.package_folder, "cmake"))
         if os.path.isfile(os.path.join(self.package_folder, "setup_vars_opencv5.cmd")):
+            os.makedirs(os.path.join(self.package_folder, "res"), exist_ok=True)
             rename(self, os.path.join(self.package_folder, "setup_vars_opencv5.cmd"),
                          os.path.join(self.package_folder, "res", "setup_vars_opencv5.cmd"))
 

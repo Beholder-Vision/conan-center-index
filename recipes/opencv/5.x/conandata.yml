@@ -1,9 +1,9 @@
 sources:
   "5.0.0-dev-beholder":
     - url: "https://github.com/Beholder-Vision/opencv.git"
-      ref: "026349d6949a19246c5ae169100cf4a5be8b19b7"
+      ref: "6349e59fe1b9ab776809b67d9ce545efdc81265e"
     - url: "https://github.com/opencv/opencv_contrib.git"
-      ref: "96257c249240011a9609ce59ac9875dffb91369b"
+      ref: "712f9758c57edcefa99fc5ff6674352decc3cf31"
 patches:
   "5.0.0-dev-beholder":
     - patch_file: "patches/4.5.5-0001-find-openexr.patch"
@@ -12,7 +12,7 @@ patches:
     - patch_file: "patches/4.5.5-0003-find-quirc.patch"
       patch_description: "Robust discovery & injection of quirc"
       patch_type: "conan"
-    - patch_file: "patches/4.8.1-0001-find-ade.patch"
+    - patch_file: "patches/5.0.0-0001-find-ade.patch"
       patch_description: "Robust discovery & injection of ade"
       patch_type: "conan"
     - patch_file: "patches/4.5.1-0001-tracking-no-plot-deps.patch"
@@ -20,10 +20,4 @@ patches:
       patch_type: "conan"
     - patch_file: "patches/4.1.2-0006-hdf.patch"
       patch_description: "Robust discovery of hdf"
-      patch_type: "conan"
-    - patch_file: "patches/4.5.2-0001-fix-zlib-static-android.patch"
-      patch_description: "Fix discovery of zlib static if Android"
-      patch_type: "conan"
-    - patch_file: "patches/4.1.2-0007-android-install-layout.patch"
-      patch_description: "Honor install layout from conan if Android"
       patch_type: "conan"

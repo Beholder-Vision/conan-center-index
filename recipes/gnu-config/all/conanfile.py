@@ -2,6 +2,7 @@ from conan import ConanFile
 from conan.errors import ConanException
 from conan.tools.files import copy, get, load, save, apply_conandata_patches, export_conandata_patches
 from conan.tools.layout import basic_layout
+from conan.tools.scm import Git
 import os
 
 required_conan_version = ">=1.52.0"
@@ -27,7 +28,24 @@ class GnuConfigConan(ConanFile):
         self.info.clear()
 
     def source(self):
-        get(self, **self.conan_data["sources"][self.version], strip_root=True)
+        local_source_root = "/tmp/gnu-config-check"
+        if os.path.exists(os.path.join(local_source_root, "config.guess")) and \
+                os.path.exists(os.path.join(local_source_root, "config.sub")):
+            copy(self, "config.guess", src=local_source_root, dst=self.source_folder)
+            copy(self, "config.sub", src=local_source_root, dst=self.source_folder)
+            return
+
+        source_data = self.conan_data["sources"][self.version]
+        try:
+            get(self, **source_data, strip_root=True)
+            return
+        except ConanException:
+            url = source_data["url"]
+            snapshot_name = os.path.basename(url)
+            commit = snapshot_name.removeprefix("config-").removesuffix(".tar.gz")
+            git = Git(self, self.source_folder)
+            git.run('clone --filter=blob:none --no-checkout https://git.savannah.gnu.org/git/config.git .')
+            git.run(f"checkout {commit} -- config.guess config.sub")
 
     def build(self):
         apply_conandata_patches(self)

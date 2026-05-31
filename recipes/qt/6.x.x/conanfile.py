@@ -431,6 +431,8 @@ class QtConan(ConanFile):
             self.requires("pulseaudio/14.2")
         if self.options.with_dbus:
             self.requires("dbus/1.15.8")
+            if self.settings.os in ["Linux", "FreeBSD"] and self.options.gui:
+                self.requires("at-spi2-core/2.53.1")
         if self.settings.os in ['Linux', 'FreeBSD'] and self.options.with_gssapi:
             self.requires("krb5/1.18.3") # conan-io/conan-center-index#4102
         if self.options.get_safe("with_md4c", False):
@@ -1051,6 +1053,17 @@ class QtConan(ConanFile):
             self.cpp_info.components[componentname].requires = _get_corrected_reqs(requires)
 
         def _create_plugin(pluginname, libname, plugintype, requires):
+            plugin_dir = os.path.join(self.package_folder, "plugins", plugintype)
+            if os.path.isdir(plugin_dir):
+                plugin_candidates = {
+                    libname + libsuffix,
+                    f"lib{libname}{libsuffix}",
+                }
+                if not any(
+                    os.path.splitext(entry)[0] in plugin_candidates
+                    for entry in os.listdir(plugin_dir)
+                ):
+                    return
             componentname = f"qt{pluginname}"
             assert componentname not in self.cpp_info.components, f"Plugin {pluginname} already present in self.cpp_info.components"
             self.cpp_info.components[componentname].set_property("cmake_target_name", f"Qt6::{pluginname}")
@@ -1111,6 +1124,8 @@ class QtConan(ConanFile):
             gui_reqs = []
             if self.options.with_dbus:
                 gui_reqs.append("DBus")
+                if self.settings.os in ["Linux", "FreeBSD"]:
+                    gui_reqs.append("at-spi2-core::atspi")
             if self.options.with_freetype:
                 gui_reqs.append("freetype::freetype")
             if self.options.with_libpng:
